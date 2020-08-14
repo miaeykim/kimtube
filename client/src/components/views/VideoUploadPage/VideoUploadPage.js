@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Typography, Button, Form, message, Input, Icon } from 'antd';
 import Dropzone from 'react-dropzone';
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -17,12 +18,16 @@ const CategoryOptions = [
     {value: 3, label: "Pets & Animals"},
 ]
 
-function VideoUploadPage() {
+function VideoUploadPage(props) {
 
+    const user = useSelector(state => state.user);
     const [VideoTitle, setVideoTitle] = useState("")
     const [Description, setDescription] = useState("")
     const [Private, setPrivate] = useState(0)
     const [Category, setCategory] = useState("Film & Animation")
+    const [FilePath, setFilePath] = useState("")
+    const [Duration, setDuration] = useState("")
+    const [ThumbnailPath, setThumbnailPath] = useState("")
 
     const onTitleChange = (e) => {
         setVideoTitle(e.currentTarget.value)
@@ -48,12 +53,59 @@ function VideoUploadPage() {
         Axios.post('/api/video/uploadfiles', formData, config)
             .then(response => {
                 if(response.data.success) {
-                    //console.log(response.data)
+
+                    let variable = {
+                        url:response.data.url,
+                        fileName:response.data.fileName
+                    }
+
+                    setFilePath(response.data.url)
+
+                    Axios.post('/api/video/thumbnail', variable)
+                    .then(response => {
+                        if(response.data.success) {
+
+                            setDuration(response.data.fileDuration)
+                            setThumbnailPath(response.data.url)
+
+                        } else{
+                            alert('Failed to create thumbnail.')
+                        }
+                    })
 
                 } else{
                     alert('Failed to upload video.')
                 }
             })
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+
+        const variables = {
+            writer: user.userData._id,
+            title: VideoTitle,
+            description: Description,
+            privacy: Private,
+            filePath: FilePath,
+            category: Category,
+            duration: Duration,
+            thumbnail: ThumbnailPath,
+        }
+
+        Axios.post('/api/video/uploadVideo', variables)
+        .then(response => {
+            if(response.data.success) {
+                message.success('Video upload successed.')
+
+                setTimeout(() => {
+                    props.history.push('/')
+                }, 3000);
+
+            } else{
+                alert('Failed to upload video.')
+            }
+        })
     }
 
     return (
@@ -62,7 +114,7 @@ function VideoUploadPage() {
                 <Title level={2}>Upload Video</Title>
             </div>
 
-            <Form onSubmit>
+            <Form onSubmit={onSubmit}>
                 <div style={{ display:'flex', justifyContent:'space-between' }}>
                     {/* Drop zone*/}
                     <Dropzone
@@ -81,10 +133,12 @@ function VideoUploadPage() {
                     </Dropzone>
                 
                     {/* Tumbnail */}
-                    <div>
-                        <img src alt />
-                    </div>
-
+                    {ThumbnailPath !== "" &&
+                        <div>
+                            <img src={`http://localhost:5000/${ThumbnailPath}`} alt="thumbnail" />
+                        </div>
+                    }
+                    
                 </div>
                 <br />
                 <br />
@@ -114,7 +168,7 @@ function VideoUploadPage() {
                 </select>
                 <br />
                 <br />
-                <Button type="primary" size="large" onClick>
+                <Button type="primary" size="large" onClick={onSubmit}>
                     Submit
                 </Button>
             </Form>
