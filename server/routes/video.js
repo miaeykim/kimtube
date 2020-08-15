@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Video } = require("../models/Video");
+const { Subscriber } = require("../models/Subscriber");
 
 const { auth } = require("../middleware/auth");
 const multer = require("multer");
@@ -109,6 +110,28 @@ router.post("/getVideoDetail", (req, res) => {
         return res.status(200).json({ success: true, videoDetail })
     })
 
+})
+
+router.post("/getSubscriptionVideos", (req, res) => {
+    //Find Subscription
+    Subscriber.find({ userFrom: req.body.userFrom })
+    .exec((err, subscriberInfo) => {
+        if(err) return res.status(400).send(err);
+
+        let subscribedUser = [];
+        subscriberInfo.map((subscriber, i) => {
+            subscribedUser.push(subscriber.userTo);
+        })
+
+        //Fetch video
+        Video.find({ writer: { $in: subscribedUser }})
+        .populate('writer')
+        .exec((err, videos) => {
+            if(err) return res.status(400).send(err)
+            return res.status(200).json({ success: true, videos })
+        })
+    })
+    
 })
 
 module.exports = router;

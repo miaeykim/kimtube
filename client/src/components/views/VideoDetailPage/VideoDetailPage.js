@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { List, Avatar, Row, Col } from 'antd';
 import Axios from 'axios';
+import SideVideo from './Sections/SideVideo';
+import Subscribe from './Sections/Subscribe';
 
 function VideoDetailPage(props) {
 
@@ -30,7 +32,7 @@ useEffect(() => {
                             <video style={{ width: '100%' }} src={`http://localhost:5000/${VideoDetail.filePath}`} controls />
     
                             <List.Item
-                                actions
+                                actions={[<Subscribe userTo={VideoDetail.writer._id} userFrom={localStorage.getItem('userId')} />]}
                             >
                                 <List.Item.Meta
                                     avatar={<Avatar src={VideoDetail.writer.image} />}
@@ -45,9 +47,7 @@ useEffect(() => {
                         </div>
                     </Col>
                     <Col lg={6} xs={24}>
-    
-                        {/* <SideVideo /> */}
-    
+                        <SideVideo />
                     </Col>
                 </Row>
         )
