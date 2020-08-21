@@ -4,6 +4,7 @@ import Axios from 'axios';
 import SideVideo from './Sections/SideVideo';
 import Subscribe from './Sections/Subscribe';
 import Comment from './Sections/Comment';
+import LikeDislikes from './Sections/LikeDislikes'
 
 function VideoDetailPage(props) {
 
@@ -42,6 +43,8 @@ const refreshFunction = (newComment) => {
     if(VideoDetail.writer) {
 
         const subscribeButton = VideoDetail.writer._id !== localStorage.getItem('userId') && <Subscribe userTo={VideoDetail.writer._id} userFrom={localStorage.getItem('userId')} />
+        const likeDislikeButton = VideoDetail.writer._id !== localStorage.getItem('userId') && <LikeDislikes video userId={localStorage.getItem('userId')} videoId={videoId} />
+
 
         return (
             <Row gutter={[16, 16]}>
@@ -50,7 +53,7 @@ const refreshFunction = (newComment) => {
                             <video style={{ width: '100%' }} src={`http://localhost:5000/${VideoDetail.filePath}`} controls />
     
                             <List.Item
-                                actions={[ subscribeButton ]}
+                                actions={[ likeDislikeButton, subscribeButton ]}
                             >
                                 <List.Item.Meta
                                     avatar={<Avatar src={VideoDetail.writer.image} />}
