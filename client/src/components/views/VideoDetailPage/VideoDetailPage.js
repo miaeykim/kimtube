@@ -13,6 +13,7 @@ function VideoDetailPage(props) {
 
     const [VideoDetail, setVideoDetail] = useState([])
     const [Comments, setComments] = useState([])
+    const [Views, setViews] = useState(0);
 
 useEffect(() => {
 
@@ -33,6 +34,15 @@ useEffect(() => {
             alert('Failed to load comment.')
         }
     })
+
+    Axios.post("/api/video/updateViews", variable)
+    .then(response => {
+        if (response.data.success) {
+          setViews(response.data.views)
+        } else {
+          console.log("Failed to count views.")
+        }
+      })
 
 }, [])
 

@@ -4,6 +4,7 @@ import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import LikeDislikes from './LikeDislikes';
 
+
 const { TextArea } = Input;
 
 function SingleComment(props) {
@@ -39,9 +40,10 @@ function SingleComment(props) {
     const onClickReplyOpen = () => {
         setOpenReply(!OpenReply)
     }
+    const likeDislikeButton = props.comment.writer._id !== localStorage.getItem('userId') && <LikeDislikes userId={localStorage.getItem('userId')} commentId={props.comment._id} />
 
     const actions = [
-        <LikeDislikes userId={localStorage.getItem('userId')} commentId={props.comment._id} />,
+        likeDislikeButton,
         <span onClick={onClickReplyOpen} key="comment-basic-reply-to">Reply to</span>
     ]
 
@@ -62,7 +64,7 @@ function SingleComment(props) {
                 }
             />
 
-            {OpenReply &&
+            {OpenReply && 
                 <form style={{ display: 'flex' }} onSubmit={onSubmit} >
                 <TextArea
                     style={{ width: '100%', borderRadius: '5px' }}
@@ -72,7 +74,7 @@ function SingleComment(props) {
                 />
                 <br />
                 <Button style={{ width: '20%', height: '52px' }} onClick={onSubmit}>Submit</Button>
-            </form>
+                </form>
             }
 
             

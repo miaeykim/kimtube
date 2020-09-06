@@ -134,4 +134,22 @@ router.post("/getSubscriptionVideos", (req, res) => {
     
 })
 
+router.post("/updateViews", (req, res) => {
+
+    Video.findById(req.body.videoId)
+      .populate("writer")
+      .exec((err, doc) => {
+        if (err) return res.status(400).json({ success: false, err })
+        doc.views++;
+
+        doc.save((err) => {
+          if (err) return res.status(400).json({ success: false, err })
+        })
+        res.status(200).json({ success: true, views: doc.views })
+
+      })
+
+  })
+  
+
 module.exports = router;

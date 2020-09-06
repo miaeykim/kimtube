@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { auth } = require("../middleware/auth");
 
 const { Comment } = require("../models/Comment")
 
@@ -7,7 +8,7 @@ const { Comment } = require("../models/Comment")
 //             Comment
 //=================================
 
-router.post("/saveComment", (req, res) => {
+router.post("/saveComment", auth, (req, res) => {
 
     const comment = new Comment(req.body)
     comment.save((err, comment) => {
