@@ -9,7 +9,7 @@ video posting web application using React (#YouTube clone)
 
 ## `VideoUploadPage.js`
 ![](videoupload.gif)
-### used NPMs
+### NPMs
 - Dropzone: upload video from client
 - ffmpeg: auto-generate video thumbnail
 - Multer: save video to server
