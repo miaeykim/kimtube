@@ -54,10 +54,10 @@ let variable  = {}
 
 ## Screenshots
 <img width="100%" alt="landing page" src="https://user-images.githubusercontent.com/52260097/103737895-749f8700-5036-11eb-90d7-f6350468bba3.png">
-###### Landing Page
+Landing Page
 
 <img width="100%" alt="comment" src="https://user-images.githubusercontent.com/52260097/103738661-bd0b7480-5037-11eb-97a2-cb244fe279fa.png">
-###### Video Detail Page
+Video Detail Page
 
 <img width="100%" alt="subscription" src="https://user-images.githubusercontent.com/52260097/103738675-c268bf00-5037-11eb-8cc7-196f94cd5fc0.png">
-###### Subscription Page
+Subscription Page
