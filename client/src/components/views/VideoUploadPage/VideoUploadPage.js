@@ -7,10 +7,6 @@ import { useSelector } from 'react-redux';
 const { TextArea } = Input;
 const { Title } = Typography;
 
-const PrivateOptions = [
-    {value: 0, label: "Private" },
-    {value: 1, label: "Public"}
-]
 const CategoryOptions = [
     {value: 0, label: "Film & Animation"},
     {value: 1, label: "Autos & Vehicles"},
@@ -23,7 +19,6 @@ function VideoUploadPage(props) {
     const user = useSelector(state => state.user);
     const [VideoTitle, setVideoTitle] = useState("")
     const [Description, setDescription] = useState("")
-    const [Private, setPrivate] = useState(0)
     const [Category, setCategory] = useState("Film & Animation")
     const [FilePath, setFilePath] = useState("")
     const [Duration, setDuration] = useState("")
@@ -34,9 +29,6 @@ function VideoUploadPage(props) {
     }
     const onDescriptionChange = (e) => {
         setDescription(e.currentTarget.value)
-    }
-    const onPrivateChange = (e) => {
-        setPrivate(e.currentTarget.value)
     }
     const onCategoryChange = (e) => {
         setCategory(e.currentTarget.value)
@@ -86,7 +78,6 @@ function VideoUploadPage(props) {
             writer: user.userData._id,
             title: VideoTitle,
             description: Description,
-            privacy: Private,
             filePath: FilePath,
             category: Category,
             duration: Duration,
@@ -152,13 +143,6 @@ function VideoUploadPage(props) {
                 <TextArea 
                     onChange={onDescriptionChange}
                     value={Description} />
-                <br />
-                <br />
-                <select onChange={onPrivateChange}>
-                    {PrivateOptions.map((item, index) => (
-                        <option key={index} value={item.value}>{item.label}</option>
-                    ))}
-                </select>
                 <br />
                 <br />
                 <select onChange={onCategoryChange}>
